@@ -79,35 +79,13 @@ const useStore = create((set) => ({
   })),
 
   // Actualizar el stock de un producto
-  updateStock: (code, quantity, action, description) => set((state) => {
-    const product = state.products.find((product) => product.code === code);
-    
-    if (!product) return;
-
-    const updatedStock = action === 'increment' 
-      ? product.stock + quantity 
-      : product.stock - quantity;
-
-    const updatedProducts = state.products.map((p) =>
-      p.code === code ? { ...p, stock: updatedStock } : p
+  updateStock: (code, quantity) => set((state) => {
+    const updatedProducts = state.products.map((product) =>
+      product.code === code ? { ...product, stock: quantity } : product
     );
-
+  
     return {
       products: updatedProducts,
-      movements: [
-        ...state.movements,
-        {
-          type: action === 'increment' ? 'Incremento de Stock' : 'Reducción de Stock',
-          code,
-          name: product.name,
-          brand: product.brand,
-          category: product.category,
-          date: new Date().toISOString().split('T')[0],
-          previousStock: product.stock,
-          newStock: updatedStock,
-          description: description || (action === 'increment' ? 'Stock incrementado' : 'Stock reducido'),
-        },
-      ],
     };
   }),
 
