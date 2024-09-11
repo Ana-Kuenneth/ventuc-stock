@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+
+const url = "https://ventuc-stock-back.onrender.com";
 
 function UpdateStockForm({ products, updateStock, closeModal }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [quantity, setQuantity] = useState('');
-  const [error, setError] = useState('');
+  const [quantity, setQuantity] = useState("");
+  const [error, setError] = useState("");
 
   // Función para manejar el cambio de selección del producto
   const handleProductClick = (product) => {
@@ -14,41 +16,58 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const quantityToUpdate = parseInt(quantity);
-  
+
     if (quantityToUpdate < 0) {
-      setError('La cantidad no puede ser negativa.');
-      return;
-    }
-  
-    if (!selectedProduct) {
-      setError('Selecciona un producto.');
+      setError("La cantidad no puede ser negativa.");
       return;
     }
 
-    // Enviar la solicitud PATCH para actualizar el stock del producto
-    fetch(`https://ventuc-stock-back.onrender.com/products/actualizarStock/${selectedProduct.code}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        stock: quantityToUpdate
-      }),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el stock');
-        }
-        return response.json();
-      })
+    if (!selectedProduct) {
+      setError("Selecciona un producto.");
+      return;
+    }
+
+    // const updatedProduct = {
+    //   ...selectedProduct,
+    //   stock: quantityToUpdate,
+    // };
+    const updatedProduct = {
+      name: selectedProduct.name,
+      description: selectedProduct.description,
+      image: selectedProduct.image,
+      date: selectedProduct.date,
+      brand: selectedProduct.brand,
+      buyer: selectedProduct.buyer,
+      stock: quantityToUpdate,
+      price: selectedProduct.price,
+      category: selectedProduct.category,
+      code: selectedProduct.code,
+    };
+
+    // const productCode = String(selectedProduct.code);
+    console.log('Product Code:', selectedProduct.code);
+    
+    fetch(
+      `${url}/products/actualizarStock/${selectedProduct.code}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedProduct),
+      }
+    )
+      .then((response) => response.json())
       .then((updatedProduct) => {
         updateStock(updatedProduct.code, updatedProduct.stock); // Actualiza el estado global
         setSelectedProduct(null); // Limpia la selección
-        setQuantity('');
-        setError('');
+        setQuantity("");
+        setError("");
         closeModal();
       })
       .catch((error) => {
-        console.error('Error:', error);
-        setError('Error al actualizar el stock.');
+        console.error("Error al actualizar el stock:", error);
+        setError(`Error al actualizar el stock: ${error.message}`);
       });
   };
 
@@ -61,11 +80,14 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
             key={product.code}
             onClick={() => handleProductClick(product)}
             style={{
-              cursor: 'pointer',
-              border: '1px solid black',
-              padding: '5px',
-              marginBottom: '5px',
-              backgroundColor: selectedProduct && selectedProduct.code === product.code ? '#f0f0f0' : 'white',
+              cursor: "pointer",
+              border: "1px solid black",
+              padding: "5px",
+              marginBottom: "5px",
+              backgroundColor:
+                selectedProduct && selectedProduct.code === product.code
+                  ? "#f0f0f0"
+                  : "white",
             }}
           >
             {product.name} (Stock actual: {product.stock})
@@ -83,7 +105,7 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
 
       <button type="submit">Actualizar Stock</button>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
 }
