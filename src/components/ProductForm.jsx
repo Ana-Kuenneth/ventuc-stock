@@ -8,7 +8,7 @@ function ProductForm({ addProduct, closeModal }) {
   const [purchaseDate, setPurchaseDate] = useState('');
   const [brand, setBrand] = useState('');
   const [category, setCategory] = useState('');
-  const [price, setPrice] = useState('');
+  const [buyPrice, setPrice] = useState('');
   const [image, setImage] = useState(''); // Field to handle images
   const [buyer, setBuyer] = useState(''); // Buyer field
 
@@ -16,19 +16,26 @@ function ProductForm({ addProduct, closeModal }) {
   const brands = useStore((state) => state.brands);
   const categories = useStore((state) => state.categories); // Categories from the store
 
+  const aumento = buyPrice * 0.5;
+  const precioVenta = buyPrice + aumento; 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
+
+
+
     const newProduct = {
-      code: String(productCodeCounter).padStart(5, '0'),
       name,
       description,
-      stock: parseInt(stock),
+      image: [image], // Assuming image URLs or paths
       date: purchaseDate,
       brand,
-      category,
-      price: parseFloat(price),
-      image: [image], // Assuming image URLs or paths
       buyer: [buyer], // Assuming one buyer at this moment
+      stock: parseInt(stock),
+      buyPrice: parseFloat(buyPrice),
+      salePrice: precioVenta,
+      category,
+      code: String(productCodeCounter).padStart(5, '0'),
     };
 
     // Llamada a la API para agregar el producto
@@ -125,7 +132,7 @@ function ProductForm({ addProduct, closeModal }) {
         Precio:
         <input
           type="number"
-          value={price}
+          value={buyPrice}
           onChange={(e) => setPrice(e.target.value)}
           required
           min="0"

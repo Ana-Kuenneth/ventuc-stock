@@ -27,6 +27,9 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
       return;
     }
 
+    // const aumento = selectedProduct.buyPrice * 0.5;
+    // const precioVenta = selectedProduct.buyPrice + aumento; 
+
     const updatedProduct = {
       name: selectedProduct.name,
       description: selectedProduct.description,
@@ -35,7 +38,8 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
       brand: selectedProduct.brand,
       buyer: selectedProduct.buyer,
       stock: quantityToUpdate,
-      price: selectedProduct.price,
+      buyPrice: selectedProduct.buyPrice,
+      salePrice: selectedProduct.salePrice,
       category: selectedProduct.category,
       code: selectedProduct.code,
     };
@@ -64,11 +68,15 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
       const movement = {
         type: "Actualización de Stock",
         code: selectedProduct.code,
+        productCode: selectedProduct.code,
         name: selectedProduct.name,
         description: description, // Usamos la descripción proporcionada
+        date: new Date().toISOString(),
+        brand: selectedProduct.brand,
+        buyer: selectedProduct.buyer,
         previousStock: selectedProduct.stock,
         newStock: quantityToUpdate,
-        date: new Date().toISOString(),
+        buyPrice: selectedProduct.buyPrice,
       };
 
       const movementResponse = await fetch(`${url}/movements`, {

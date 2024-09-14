@@ -52,24 +52,26 @@ const Home = () => {
           <thead>
             <tr>
               <th>Código</th>
+              <th>Imagen</th>
               <th>Nombre</th>
-              <th>Cantidad</th>
-              <th>Fecha</th>
               <th>Descripción</th>
-              <th>Precio</th>
-              <th>Comprador</th>
+              <th>Categoría</th>
+              <th>Cantidad</th>
+              <th>Precio de costo</th>
+              <th>Precio de venta</th>
             </tr>
           </thead>
           <tbody>
             {products.slice().reverse().map((product) => (
               <tr key={product.code}>
                 <td>{product.code}</td>
+                <td>{product.image}</td>
                 <td>{product.name}</td>
-                <td>{product.stock}</td>
-                <td>{product.date}</td>
                 <td>{product.description}</td>
-                <td>{product.price}</td>
-                <td>{product.buyer}</td>
+                <td>{product.category}</td>
+                <td>{product.stock}</td>
+                <td>{product.buyPrice}</td>
+                <td>{product.salePrice}</td>
               </tr>
             ))}
           </tbody>

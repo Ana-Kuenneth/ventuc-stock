@@ -10,7 +10,7 @@ import useStore from './store/store';
 const url = "https://ventuc-stock-back.onrender.com"
 
 function App() {
-  const { setBrands, setCategories, setProducts } = useStore();
+  const { setMovements, setBrands, setCategories, setProducts } = useStore();
 
   // Si alguna de las funciones es undefined, maneja el error
   if (!setBrands || !setCategories || !setProducts) {
@@ -63,11 +63,27 @@ function App() {
     }
   }, [setProducts]);
 
+  const getMovements = useCallback(async () => {
+    try {
+      const response = await fetch(`${url}/movements`);
+      if (!response.ok) {
+        throw new Error("Error en la solicitud: " + response.status);
+      }
+      const data = await response.json();
+
+      setMovements(data);
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }, [setMovements]);
+
   useEffect(() => {
     getBrands();
     getCategories();
     getProducts();
-  }, [getBrands, getCategories, getProducts]);
+    getMovements();
+  }, [getBrands, getCategories, getProducts, getMovements]);
 
   return (
     <Router>

@@ -32,16 +32,15 @@ const useStore = create((set) => ({
         {
           type: 'Compra',
           code: newProduct.code,
+          productCode: newProduct.code,
           name: newProduct.name,
-          brand: newProduct.brand,
-          category: newProduct.category,
           description: newProduct.description,
           date: newProduct.date,
+          brand: newProduct.brand,
+          buyer: newProduct.buyer,
           previousStock: 0,
           newStock: newProduct.stock,
-          price: newProduct.price,
-          buyer: newProduct.buyer,
-          image: newProduct.image,
+          buyPrice: newProduct.buyPrice,
         },
       ],
       productCodeCounter: state.productCodeCounter + 1, // Incrementar el contador
@@ -156,6 +155,14 @@ const useStore = create((set) => ({
 
   removeCategory: (code) => set((state) => ({
     categories: state.categories.filter((category) => category.code !== code),
+  })),
+
+
+  //Movimientos
+  setMovements: (movements) => set({ movements }),
+
+  deleteMovement: (code) => set((state) => ({
+    movements: state.movements.filter((movement) => movement.code !== code),
   })),
 }));
 
