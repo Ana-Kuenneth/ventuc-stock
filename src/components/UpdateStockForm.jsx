@@ -5,15 +5,15 @@ const url = "https://ventuc-stock-back.onrender.com";
 function UpdateStockForm({ products, updateStock, closeModal }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState("");
+  const [description, setDescription] = useState(""); // Campo de descripción para el movimiento
   const [error, setError] = useState("");
 
-  // Función para manejar el cambio de selección del producto
   const handleProductClick = (product) => {
-    setSelectedProduct(product); // Guarda el producto completo
-    setQuantity(product.stock); // Establece la cantidad basada en el stock del producto seleccionado
+    setSelectedProduct(product);
+    setQuantity(product.stock);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const quantityToUpdate = parseInt(quantity);
 
@@ -27,10 +27,6 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
       return;
     }
 
-    // const updatedProduct = {
-    //   ...selectedProduct,
-    //   stock: quantityToUpdate,
-    // };
     const updatedProduct = {
       name: selectedProduct.name,
       description: selectedProduct.description,
@@ -44,31 +40,60 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
       code: selectedProduct.code,
     };
 
-    // const productCode = String(selectedProduct.code);
-    console.log('Product Code:', selectedProduct.code);
-    
-    fetch(
-      `${url}/products/actualizarStock/${selectedProduct.code}`,
-      {
-        method: "PATCH",
+    try {
+      // 1. Actualizar el stock del producto
+      const response = await fetch(
+        `${url}/products/actualizarStock/${selectedProduct.code}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedProduct),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al actualizar el stock");
+      }
+
+      const updatedProductData = await response.json();
+      updateStock(updatedProductData.code, updatedProductData.stock);
+
+      // 2. Registrar el movimiento
+      const movement = {
+        type: "Actualización de Stock",
+        code: selectedProduct.code,
+        name: selectedProduct.name,
+        description: description, // Usamos la descripción proporcionada
+        previousStock: selectedProduct.stock,
+        newStock: quantityToUpdate,
+        date: new Date().toISOString(),
+      };
+
+      const movementResponse = await fetch(`${url}/movements`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedProduct),
-      }
-    )
-      .then((response) => response.json())
-      .then((updatedProduct) => {
-        updateStock(updatedProduct.code, updatedProduct.stock); // Actualiza el estado global
-        setSelectedProduct(null); // Limpia la selección
-        setQuantity("");
-        setError("");
-        closeModal();
-      })
-      .catch((error) => {
-        console.error("Error al actualizar el stock:", error);
-        setError(`Error al actualizar el stock: ${error.message}`);
+        body: JSON.stringify(movement),
       });
+
+      if (!movementResponse.ok) {
+        throw new Error("Error al registrar el movimiento");
+      }
+
+      // Restablecer el estado si todo ha ido bien
+      setSelectedProduct(null);
+      setQuantity("");
+      setDescription("");
+      setError("");
+      closeModal();
+
+    } catch (error) {
+      console.error("Error en la actualización o movimiento:", error);
+      setError(`Error: ${error.message}`);
+    }
   };
 
   return (
@@ -100,6 +125,14 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
         min="0"
         value={quantity}
         onChange={(e) => setQuantity(e.target.value)}
+        required
+      />
+
+      {/* Agregar un campo de descripción */}
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Descripción del cambio de stock"
         required
       />
 
