@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import useStore from '../store/store';
 
-function ProductForm({ addProduct, closeModal }) {
+const url = "https://ventuc-stock-back.onrender.com";
+
+function ProductForm({ closeModal }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [stock, setStock] = useState('');
@@ -9,49 +11,124 @@ function ProductForm({ addProduct, closeModal }) {
   const [brand, setBrand] = useState('');
   const [category, setCategory] = useState('');
   const [buyPrice, setPrice] = useState('');
-  const [image, setImage] = useState(''); // Field to handle images
-  const [buyer, setBuyer] = useState(''); // Buyer field
+  const [image, setImage] = useState('');
+  const [buyer, setBuyer] = useState('');
+  const [error, setError] = useState('');
 
   const productCodeCounter = useStore((state) => state.productCodeCounter);
   const brands = useStore((state) => state.brands);
-  const categories = useStore((state) => state.categories); // Categories from the store
+  const categories = useStore((state) => state.categories);
 
   const aumento = buyPrice * 0.5;
-  const precioVenta = buyPrice + aumento; 
-  
-  const handleSubmit = (e) => {
+  const precioVenta = parseFloat(buyPrice) + parseFloat(aumento);
+
+  const compraProducto = async (newProduct) => {
+    try {
+      const response = await fetch(`${url}/products`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newProduct),
+      });
+
+      const data = await response.json();
+      return data; // Devuelve los datos del producto creado
+
+    } catch (error) {
+      console.error('Error adding product:', error);
+      throw error;
+    }
+  };
+
+  const registerMovement = async (movement) => {
+    const response = await fetch(`${url}/movements`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(movement),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al registrar el movimiento: ${response.statusText}`);
+    }
+
+    return await response.json();
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const stockNuevoProducto = parseInt(stock);
 
+    if (isNaN(stockNuevoProducto) || stockNuevoProducto < 0) {
+      setError("La cantidad debe ser un número positivo.");
+      return;
+    }
 
-    const newProduct = {
-      name,
-      description,
-      image: [image], // Assuming image URLs or paths
-      date: purchaseDate,
-      brand,
-      buyer: [buyer], // Assuming one buyer at this moment
-      stock: parseInt(stock),
-      buyPrice: parseFloat(buyPrice),
-      salePrice: precioVenta,
-      category,
-      code: String(productCodeCounter).padStart(5, '0'),
-    };
+    if (!name) {
+      setError("Ingresa el nombre del producto.");
+      return;
+    }
 
-    // Llamada a la API para agregar el producto
-    fetch('https://ventuc-stock-back.onrender.com/products', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        addProduct(data); // Agregar el producto al estado local después de una respuesta exitosa
-        closeModal();
-      })
-      .catch((error) => console.error('Error adding product:', error));
+    try {
+      // 1. PRODUCTO
+      const newProduct = {
+        name,
+        description,
+        image: [image],
+        date: purchaseDate,
+        brand,
+        buyer: [buyer],
+        stock: parseInt(stock),
+        buyPrice: parseFloat(buyPrice),
+        salePrice: precioVenta,
+        category,
+        code: String(productCodeCounter).padStart(5, '0'),
+      };
+
+      const newProductData = await compraProducto(newProduct);
+
+      // Solo agregar el producto después de obtener una respuesta exitosa del servidor
+      // handleAddProduct(newProductData);
+
+      // 2. MOVIMIENTO
+      const movement = {
+        type: "Ingreso de producto",
+        code: newProductData.code, // Usa el código del producto retornado por el servidor
+        productCode: newProductData.code,
+        name: name,
+        description: description,
+        date: new Date().toISOString(),
+        brand: newProductData.brand,
+        buyer: String(buyer),
+        previousStock: 0,
+        newStock: stock,
+        buyPrice: newProductData.buyPrice,
+      };
+
+      await registerMovement(movement);
+
+      // Restablecer el estado si todo ha ido bien
+      setError("");
+      setName("");
+      setDescription("");
+      setBrand("");
+      setCategory("");
+      setBuyer("");
+      setImage("");
+      setPrice("");
+      setPurchaseDate("");
+      setStock("");
+      console.log("Cerrando modal");
+      closeModal();
+      console.log("Ya se cerró");
+
+    } catch (error) {
+      console.error("Error en el registro del producto o movimiento:", error);
+      setError(`Error: ${error.message}`);
+    }
   };
 
   return (

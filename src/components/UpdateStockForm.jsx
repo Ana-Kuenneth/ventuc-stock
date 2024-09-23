@@ -1,24 +1,59 @@
 import React, { useState } from "react";
+import useStore from '../store/store';
 
 const url = "https://ventuc-stock-back.onrender.com";
 
-function UpdateStockForm({ products, updateStock, closeModal }) {
+function UpdateStockForm({ closeModal }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState("");
   const [description, setDescription] = useState(""); // Campo de descripción para el movimiento
   const [error, setError] = useState("");
+
+  const { products, updateStock } = useStore();
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
     setQuantity(product.stock);
   };
 
+  const updateProductStock = async (productCode, stock) => {
+    const response = await fetch(`${url}/products/actualizarStock/${productCode}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ stock }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al actualizar el stock: ${response.statusText}`);
+    }
+
+    return await response.json();
+  };
+
+  const registerMovement = async (movement) => {
+    const response = await fetch(`${url}/movements`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(movement),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al registrar el movimiento: ${response.statusText}`);
+    }
+
+    return await response.json();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const quantityToUpdate = parseInt(quantity);
 
-    if (quantityToUpdate < 0) {
-      setError("La cantidad no puede ser negativa.");
+    if (isNaN(quantityToUpdate) || quantityToUpdate < 0) {
+      setError("La cantidad debe ser un número positivo.");
       return;
     }
 
@@ -27,41 +62,9 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
       return;
     }
 
-    // const aumento = selectedProduct.buyPrice * 0.5;
-    // const precioVenta = selectedProduct.buyPrice + aumento; 
-
-    const updatedProduct = {
-      name: selectedProduct.name,
-      description: selectedProduct.description,
-      image: selectedProduct.image,
-      date: selectedProduct.date,
-      brand: selectedProduct.brand,
-      buyer: selectedProduct.buyer,
-      stock: quantityToUpdate,
-      buyPrice: selectedProduct.buyPrice,
-      salePrice: selectedProduct.salePrice,
-      category: selectedProduct.category,
-      code: selectedProduct.code,
-    };
-
     try {
       // 1. Actualizar el stock del producto
-      const response = await fetch(
-        `${url}/products/actualizarStock/${selectedProduct.code}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedProduct),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Error al actualizar el stock");
-      }
-
-      const updatedProductData = await response.json();
+      const updatedProductData = await updateProductStock(selectedProduct.code, quantityToUpdate);
       updateStock(updatedProductData.code, updatedProductData.stock);
 
       // 2. Registrar el movimiento
@@ -73,23 +76,13 @@ function UpdateStockForm({ products, updateStock, closeModal }) {
         description: description, // Usamos la descripción proporcionada
         date: new Date().toISOString(),
         brand: selectedProduct.brand,
-        buyer: selectedProduct.buyer,
+        buyer: String(selectedProduct.buyer),
         previousStock: selectedProduct.stock,
         newStock: quantityToUpdate,
         buyPrice: selectedProduct.buyPrice,
       };
 
-      const movementResponse = await fetch(`${url}/movements`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(movement),
-      });
-
-      if (!movementResponse.ok) {
-        throw new Error("Error al registrar el movimiento");
-      }
+      await registerMovement(movement);
 
       // Restablecer el estado si todo ha ido bien
       setSelectedProduct(null);

@@ -70,6 +70,9 @@ function BrandPage() {
   return (
     <div>
       <h2>Registro de Marcas</h2>
+      <button onClick={() => navigate("/inventory")}>
+        Volver a la Página Principal
+      </button>
       <div className="agregarMarca">
         <input
           type="text"
@@ -120,9 +123,6 @@ function BrandPage() {
           ))}
         </tbody>
       </table>
-      <button onClick={() => navigate("/")}>
-        Volver a la Página Principal
-      </button>
     </div>
   );
 }

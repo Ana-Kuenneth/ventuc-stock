@@ -1,110 +1,146 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
-import Modal from './components/Modal';
-import useStore from './store/store';
-import ProductForm from './components/ProductForm';
-import UpdateStockForm from './components/UpdateStockForm';
-import SalesForm from './components/SalesForm';
+import "./styles/Home.css";
+import Logo from "./assets/logo.jpeg";
+import { Link } from "react-router-dom";
+import Modal from "./components/Modal";
+import useStore from "./store/store";
+import ProductForm from "./components/ProductForm";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faBoxesStacked, faFolderOpen, faArrowUpFromBracket, faSquarePlus} from "@fortawesome/free-solid-svg-icons";
+
+import SalesForm from "./components/SalesForm";
 
 const Home = () => {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isSalesModalOpen, setIsSalesModalOpen] = useState(false);
-  const { products, addProduct, updateStock, recordSale } = useStore();
+  const { products, addProduct } = useStore();
+
+  const [time, setTime] = useState("");
+  const [date, setDate] = useState("");
+
+  useEffect(() => {
+    const updateDateTime = () => {
+      const f = new Date();
+      const dia = String(f.getDate()).padStart(2, "0");
+      const mes = String(f.getMonth() + 1).padStart(2, "0");
+      const anio = f.getFullYear();
+      const timeString = f.toLocaleTimeString();
+
+      const semana = [
+        "DOMINGO",
+        "LUNES",
+        "MARTES",
+        "MIÉRCOLES",
+        "JUEVES",
+        "VIERNES",
+        "SÁBADO",
+      ];
+      const diaSemana = semana[f.getDay()];
+
+      setTime(timeString);
+      setDate(`${diaSemana} ${dia}-${mes}-${anio}`);
+    };
+
+    // Actualizar cada segundo
+    const intervalId = setInterval(updateDateTime, 1000);
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
+  }, []);
+
 
   const handleAddProduct = (productData) => {
     const newProduct = {
       ...productData,
       code: String(products.length + 1).padStart(5, "0"),
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split("T")[0],
     };
 
     // Send POST request to add the product to the backend
-    fetch('https://ventuc-stock-back.onrender.com/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    fetch("https://ventuc-stock-back.onrender.com/products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newProduct),
     })
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((product) => {
-        addProduct(product);  // Update Zustand state
-        setIsProductModalOpen(false);  // Close the modal after adding
+        addProduct(product); // Update Zustand state
+        setIsProductModalOpen(false); // Close the modal after adding
       })
-      .catch(error => console.error('Error adding product:', error));
+      .catch((error) => console.error("Error adding product:", error));
   };
 
-  useEffect(() => {
-  }, [ products ]);
+  // useEffect(() => {
+  // }, [ products ]);
 
   return (
     <>
-      <div>
-        <h1>Control de Stock</h1>
-        <button onClick={() => setIsProductModalOpen(true)}>Agregar Producto Nuevo</button>
-        <button onClick={() => setIsUpdateModalOpen(true)}>Actualizar Stock</button>
-        <button onClick={() => setIsSalesModalOpen(true)}>Registrar Venta</button>
-        <Link to="/historial"><button>Historial de Compras y Actualizaciones</button></Link>
-        <Link to="/historial-ventas"><button>Historial de Ventas</button></Link>
-        <Link to="/marcas"><button>Marcas</button></Link>
-        <Link to="/categorias"><button>Categorías</button></Link>
-        <h2>Lista de Productos</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Imagen</th>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Categoría</th>
-              <th>Cantidad</th>
-              <th>Precio de costo</th>
-              <th>Precio de venta</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.slice().reverse().map((product) => (
-              <tr key={product.code}>
-                <td>{product.code}</td>
-                <td>{product.image}</td>
-                <td>{product.name}</td>
-                <td>{product.description}</td>
-                <td>{product.category}</td>
-                <td>{product.stock}</td>
-                <td>{product.buyPrice}</td>
-                <td>{product.salePrice}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="contenedor">
+        <div className="parte1">
+          <h1 className="title">Control de Stock</h1>
+          <div className="contenedorLogo">
 
-        {isProductModalOpen && (
-          <Modal closeModal={() => setIsProductModalOpen(false)}>
-            <ProductForm
-              handleAddProduct={handleAddProduct}  // Pass the handler function
-            />
-          </Modal>
-        )}
+          <img className="imgLogo" src={Logo} alt="logo" />
+          </div>
+          <p className="subtitle">Para brindar un mejor servicio</p>
+        </div>
 
-        {isUpdateModalOpen && (
-          <Modal closeModal={() => setIsUpdateModalOpen(false)}>
-            <UpdateStockForm
-              products={products}
-              updateStock={updateStock}
-              closeModal={() => setIsUpdateModalOpen(false)}
-            />
-          </Modal>
-        )}
-
-        {isSalesModalOpen && (
-          <Modal closeModal={() => setIsSalesModalOpen(false)}>
-            <SalesForm
-              recordSale={recordSale}
-              products={products}
-              closeModal={() => setIsSalesModalOpen(false)}
-            />
-          </Modal>
-        )}
+        <div className="parte2">
+          <div className="mensajeUsuario">
+            <p className="fecha">{date}</p>
+            <p className="hora">{time}</p>
+            <p>Bienvenido Usuario</p>
+          </div>
+          <div className="contenedorTodosBtn">
+            <div className="contenedorBtn">
+              <button
+                className="botones"
+                onClick={() => setIsProductModalOpen(true)}
+              >
+                Agregar Producto Nuevo
+              </button>
+              <FontAwesomeIcon icon={faSquarePlus} size="2xl" style={{color: "#ffffff",}} />
+            </div>
+            
+            <div className="contenedorBtn">
+              <Link to="/historial">
+                <button className="botones">Registro</button>
+              </Link>
+              <FontAwesomeIcon icon={faFolderOpen} size="2xl" style={{color: "#ffffff",}} />
+            </div>
+            
+            <div className="contenedorBtn">
+              <button
+                className="botones"
+                onClick={() => setIsSalesModalOpen(true)}
+              >
+                Registrar Venta
+              </button>
+              <FontAwesomeIcon icon={faArrowUpFromBracket} size="2xl" style={{color: "#ffffff",}}/>
+            </div>
+            <div className="contenedorBtn">
+              <Link to="/inventory">
+                <button className="botones">Inventario</button>
+              </Link>
+              <FontAwesomeIcon icon={faBoxesStacked} size="2xl" style={{color: "#ffffff",}} />
+            </div>
+          </div>
+        </div>
       </div>
+      {isProductModalOpen && (
+        <Modal closeModal={() => setIsProductModalOpen(false)}>
+          <ProductForm closeModal={() => setIsProductModalOpen(false)} />
+        </Modal>
+      )}
+
+
+
+      {isSalesModalOpen && (
+        <Modal closeModal={() => setIsSalesModalOpen(false)}>
+          <SalesForm closeModal={() => setIsSalesModalOpen(false)} />
+        </Modal>
+      )}
     </>
   );
 };

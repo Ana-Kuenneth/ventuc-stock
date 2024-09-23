@@ -70,6 +70,9 @@ function CategoryPage() {
   return (
     <div>
       <h2>Registro de Categorías</h2>
+      <button onClick={() => navigate("/inventory")}>
+        Volver a la Página Principal
+      </button>
       <div className="agregarCategoría">
         <input
           type="text"
@@ -122,9 +125,6 @@ function CategoryPage() {
           ))}
         </tbody>
       </table>
-      <button onClick={() => navigate("/")}>
-        Volver a la Página Principal
-      </button>
     </div>
   );
 }

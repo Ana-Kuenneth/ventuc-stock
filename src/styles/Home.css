@@ -1,0 +1,352 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 100vh;
+    /* background-color: #e1e4e8; */
+    background-color: #f6f6f6;
+}
+
+/* Paleta de colores elegida
+.color1 { #2c9c76 };
+.color2 { #a6dcc9 };
+.color3 { #249c74 };
+.color4 { #5ea992 };
+.color5 { #96c7b8 };
+******Agrego color nuevo a la paleta: #999;
+******Agrego color nuevo a la paleta: #f8f8f8;
+*/
+
+.contenedor {
+    height: 500px;
+    min-width: 1000px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    border: solid thin rgba(0, 0, 0, .1);
+    box-shadow: 0 15px 15px rgba(0, 0, 0, 0.37);
+
+    transition: all is ease;
+
+}
+
+/*1era parte*/
+.parte1{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 2rem;
+
+    background-color: #e1e4e8 ;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border: solid thin #e1e4e8;
+    height: 20%;
+    width: 100%;
+
+}
+
+.title{
+    padding-left: 2rem;
+    color: #000000;
+}
+
+.contenedorLogo{
+    background-color: #ffffff;
+    border-radius: 50%;
+}
+
+.imgLogo{
+    padding: 1.25rem 1rem 1rem 1rem;
+    width: 5.8rem;
+}
+
+.subtitle {
+    /* padding: 30px 20px 30px 40px; */
+    font-size: 2rem;
+    color: #000000;
+
+    /* width: 50%; */
+    /* display: flex; */
+
+}
+
+.parte1 >p{
+    /* padding: 3% 3% 2% 3%; */
+    font-size: 1.2rem;
+
+    text-align: center;
+    justify-content: center;
+    /* display: flex; */
+    /* width: 50%; */
+}
+
+/*2da parte*/
+.parte2{
+    background-color: #f8f8f8;
+    height: 80%;
+
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+}
+
+.mensajeUsuario{
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: end;
+}
+
+.mensajeUsuario>p{
+    padding-top: 1rem;
+    padding-right: 2rem;
+}
+
+/*Botones*/
+.contenedorTodosBtn{
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.contenedorBtn{
+    width: 30%;
+    height: 30%;
+    border-radius: 20px;
+    border: solid thin rgba(0, 0, 0, .1);
+    background-color: #df7070;
+    color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.botones{
+    font-size: medium;
+}
+
+/**************************Pacientes****************************/
+/* .formPacientes{
+    display: none;
+} */
+
+/* .formPacientes, .formMedicos {
+    background-color: #f8f8f8;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    padding: 3%;
+} */
+
+/*Inputs Datos del nuevo usuario*/
+/* .datos, .datos2{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+
+.dato{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    width: 50%;
+    padding-right: 3%;
+    padding-left: 3%;
+}
+
+.formPacientes label, .formMedicos label {
+    font-size: 0.9rem;
+    padding: 0 10px 10px 10px;
+}
+
+.formPacientes label,
+.formPacientes input,
+.formMedicos label,
+.formMedicos input{
+    width: 50%;
+}
+
+.formPacientes input,
+.formMedicos input{
+    height: 3vh;
+    padding: 10px;
+}
+
+#obraSocial{
+    height: 3vh;
+} */
+/*Parrafo aclaraciÃ³n*/
+/* .formPacientes>p,
+.formMedicos>p{
+    padding-top: 3%;
+    padding-left: 5%;
+    font-size: 0.9rem;
+    font-weight: bold;
+    font-style: italic;
+} */
+
+
+
+/*BotÃ³n registrarse*/
+#registrar_btn, 
+#registrarM_btn{
+    background-color: transparent;
+    border: solid 2px #999;
+    border-radius: 20px;
+
+    min-width: fit-content;
+    width: 10vw;
+    height: 5vh;
+    padding-top: 1%;
+    padding-bottom: 1%;
+
+    color: #333;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .3 ease;   
+}
+
+/*Efecto Hover BotÃ³n Registrarse*/
+#registrar_btn:hover,
+#registrarM_btn:hover {
+    background-color: #999;
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    width: 10vw;
+}
+
+/*Botones*/
+.segundo_btn{
+    font-size: 0.8rem;
+}
+/*BotÃ³n Registro del personal*/
+.tercer_btn{
+    display: flex;
+    justify-content: flex-end;
+}
+
+#registroPersonal{
+    padding-right: 10%;
+}
+
+#registroPersonal > span,
+#volver > span{
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+/**************************MÃ©dicos****************************/
+/* .formMedicos{
+    display: none;
+}
+
+#titleMed{
+    display: none;
+} */
+
+/*************************RESPONSIVE***********************/
+@media only screen and (max-width: 768px) {
+    .contenedor{
+        height: fit-content;
+        
+    }
+
+    body{
+        height: min-content;
+    }
+
+    #titlePac, #titleMed{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #titlePac > p, #titlePac>h2,
+    #titleMed > p, #titleMed>h2{
+        width: 100%;
+    }
+
+    #titlePac > p , #titleMed > p{
+        padding-bottom: 5%;
+    }
+
+    #titlePac>h2, #titleMed>h2{
+        text-align: center;
+        padding-bottom: 20px;
+        justify-content: center;
+    }
+
+    .datos, .datos2{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .dato{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 1%;
+    }
+
+    /* #obligatorio{
+        text-align: center;
+        margin: 0;
+        padding: 5% 0;
+    } */
+
+    /* .botones{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    } */
+    /* .primer_btn, #registrarM_btn, .segundo_btn, #registrar_btn{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    } */
+
+    /* #registrarM_btn, #registrar_btn{
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+    } */
+
+    /* .botones>div{
+        padding: 3%;
+    } */
+
+
+}

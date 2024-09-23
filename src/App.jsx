@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HistoryPage from './components/HistoryPage';
+import HistoryPage from './pages/HistoryPage';
+import MovementsHistoryPage from './components/MovementsHistoryPage';
 import SalesHistoryPage from './components/SalesHistoryPage';
 import BrandPage from './components/BrandPage';
 import CategoryPage from './components/CategoryPage';
+import InventoryPage from './pages/InventoryPage';
 import Home from './Home';
 import useStore from './store/store';
 
 const url = "https://ventuc-stock-back.onrender.com"
 
 function App() {
-  const { setMovements, setBrands, setCategories, setProducts } = useStore();
+  const { movements, setMovements, setBrands, setCategories, setProducts, recordSale } = useStore();
 
   // Si alguna de las funciones es undefined, maneja el error
   if (!setBrands || !setCategories || !setProducts) {
@@ -78,21 +80,54 @@ function App() {
     }
   }, [setMovements]);
 
+  const getSales = useCallback(async () => {
+    try {
+      const response = await fetch(`${url}/sales`);
+      if (!response.ok) {
+        throw new Error("Error en la solicitud: " + response.status);
+      }
+      const data = await response.json();
+
+      recordSale(data);
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }, [recordSale]);
+
+  // const getSaleMovements = useCallback(async () => {
+  //   try {
+  //     const response = await fetch(`${url}/salesMovements`);
+  //     if (!response.ok) {
+  //       throw new Error("Error en la solicitud: " + response.status);
+  //     }
+  //     const data = await response.json();
+
+  //     setSaleMovements(data);
+
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // }, [setSaleMovements]);
+
   useEffect(() => {
     getBrands();
     getCategories();
     getProducts();
     getMovements();
-  }, [getBrands, getCategories, getProducts, getMovements]);
+    getSales();
+  }, [getBrands, getCategories, getProducts, getMovements, getSales]);
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="/historial" element={<HistoryPage />} />
+        <Route path="/historial-movimientos" element={<MovementsHistoryPage />} />
         <Route path="/historial-ventas" element={<SalesHistoryPage />} />
         <Route path="/marcas" element={<BrandPage />} />
         <Route path="/categorias" element={<CategoryPage />} />
+        <Route path="/inventory" element={<InventoryPage />} />
       </Routes>
     </Router>
   );
