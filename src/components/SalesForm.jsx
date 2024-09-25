@@ -306,7 +306,7 @@ function SalesForm({ closeModal }) {
             <button
               type="button"
               className="botonVenta"
-              onClick={closeModal} // Usamos closeModal para que haga la misma acción que la "X"
+              onClick={closeModal} 
             >
               Cancelar
             </button>
