@@ -1,25 +1,32 @@
-import React, { useCallback, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HistoryPage from './pages/HistoryPage';
-import MovementsHistoryPage from './components/MovementsHistoryPage';
-import SalesHistoryPage from './components/SalesHistoryPage';
-import BrandPage from './components/BrandPage';
-import CategoryPage from './components/CategoryPage';
-import InventoryPage from './pages/InventoryPage';
-import Home from './Home';
-import useStore from './store/store';
+import React, { useCallback, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HistoryPage from "./pages/HistoryPage";
+import MovementsHistoryPage from "./components/MovementsHistoryPage";
+import SalesHistoryPage from "./components/SalesHistoryPage";
+import BrandPage from "./components/BrandPage";
+import CategoryPage from "./components/CategoryPage";
+import InventoryPage from "./pages/InventoryPage";
+import Home from "./Home";
+import useStore from "./store/store";
 
-const url = "https://ventuc-stock-back.onrender.com"
+const url = "https://ventuc-stock-back.onrender.com";
 
 function App() {
-  const { movements, setMovements, setBrands, setCategories, setProducts, recordSale } = useStore();
+  const {
+    movements,
+    setMovements,
+    setBrands,
+    setCategories,
+    setProducts,
+    recordSale,
+  } = useStore();
 
   // Si alguna de las funciones es undefined, maneja el error
   if (!setBrands || !setCategories || !setProducts) {
     console.error("Algunos métodos de la tienda no están disponibles.");
     return null;
   }
-  
+
   const getBrands = useCallback(async () => {
     try {
       const response = await fetch(`${url}/brands`);
@@ -29,7 +36,6 @@ function App() {
       const data = await response.json();
 
       setBrands(data);
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -44,7 +50,6 @@ function App() {
       const data = await response.json();
 
       setCategories(data);
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -59,7 +64,6 @@ function App() {
       const data = await response.json();
 
       setProducts(data);
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -74,7 +78,6 @@ function App() {
       const data = await response.json();
 
       setMovements(data);
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -89,7 +92,6 @@ function App() {
       const data = await response.json();
 
       recordSale(data);
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -121,9 +123,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />}/>
+        <Route path="/" element={<Home />} />
         <Route path="/historial" element={<HistoryPage />} />
-        <Route path="/historial-movimientos" element={<MovementsHistoryPage />} />
+        <Route
+          path="/historial-movimientos"
+          element={<MovementsHistoryPage />}
+        />
         <Route path="/historial-ventas" element={<SalesHistoryPage />} />
         <Route path="/marcas" element={<BrandPage />} />
         <Route path="/categorias" element={<CategoryPage />} />

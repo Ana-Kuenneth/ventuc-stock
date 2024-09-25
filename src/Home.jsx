@@ -7,7 +7,12 @@ import useStore from "./store/store";
 import ProductForm from "./components/ProductForm";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faBoxesStacked, faFolderOpen, faArrowUpFromBracket, faSquarePlus} from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoxesStacked,
+  faFolderOpen,
+  faArrowUpFromBracket,
+  faSquarePlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 import SalesForm from "./components/SalesForm";
 
@@ -49,7 +54,6 @@ const Home = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-
   const handleAddProduct = (productData) => {
     const newProduct = {
       ...productData,
@@ -80,8 +84,7 @@ const Home = () => {
         <div className="parte1">
           <h1 className="title">Control de Stock</h1>
           <div className="contenedorLogo">
-
-          <img className="imgLogo" src={Logo} alt="logo" />
+            <img className="imgLogo" src={Logo} alt="logo" />
           </div>
           <p className="subtitle">Para brindar un mejor servicio</p>
         </div>
@@ -100,16 +103,24 @@ const Home = () => {
               >
                 Agregar Producto Nuevo
               </button>
-              <FontAwesomeIcon icon={faSquarePlus} size="2xl" style={{color: "#ffffff",}} />
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                size="2xl"
+                style={{ color: "#ffffff" }}
+              />
             </div>
-            
+
             <div className="contenedorBtn">
               <Link to="/historial">
                 <button className="botones">Registro</button>
               </Link>
-              <FontAwesomeIcon icon={faFolderOpen} size="2xl" style={{color: "#ffffff",}} />
+              <FontAwesomeIcon
+                icon={faFolderOpen}
+                size="2xl"
+                style={{ color: "#ffffff" }}
+              />
             </div>
-            
+
             <div className="contenedorBtn">
               <button
                 className="botones"
@@ -117,13 +128,21 @@ const Home = () => {
               >
                 Registrar Venta
               </button>
-              <FontAwesomeIcon icon={faArrowUpFromBracket} size="2xl" style={{color: "#ffffff",}}/>
+              <FontAwesomeIcon
+                icon={faArrowUpFromBracket}
+                size="2xl"
+                style={{ color: "#ffffff" }}
+              />
             </div>
             <div className="contenedorBtn">
               <Link to="/inventory">
                 <button className="botones">Inventario</button>
               </Link>
-              <FontAwesomeIcon icon={faBoxesStacked} size="2xl" style={{color: "#ffffff",}} />
+              <FontAwesomeIcon
+                icon={faBoxesStacked}
+                size="2xl"
+                style={{ color: "#ffffff" }}
+              />
             </div>
           </div>
         </div>
@@ -133,8 +152,6 @@ const Home = () => {
           <ProductForm closeModal={() => setIsProductModalOpen(false)} />
         </Modal>
       )}
-
-
 
       {isSalesModalOpen && (
         <Modal closeModal={() => setIsSalesModalOpen(false)}>

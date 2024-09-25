@@ -70,7 +70,7 @@ function HistoryPage() {
           )}
         </tbody>
       </table>
-      
+
       <Link to="/">
         <button>Volver a la página principal</button>
       </Link>

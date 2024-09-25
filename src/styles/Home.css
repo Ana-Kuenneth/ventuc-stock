@@ -54,7 +54,7 @@ body {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     border: solid thin #e1e4e8;
-    height: 20%;
+    height: 25%;
     width: 100%;
 
 }
@@ -97,7 +97,7 @@ body {
 /*2da parte*/
 .parte2{
     background-color: #f8f8f8;
-    height: 80%;
+    height: 75%;
 
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;

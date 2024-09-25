@@ -114,11 +114,13 @@ function BrandPage() {
                   </>
                 ) : (
                   <> */}
-                    {/* <button onClick={() => setEditingBrand(brand.code)}>Editar</button> */}
-                    <button onClick={() => handleDeleteBrand(brand.code)}>Eliminar</button>
-                  {/* </>
+                {/* <button onClick={() => setEditingBrand(brand.code)}>Editar</button> */}
+                <button onClick={() => handleDeleteBrand(brand.code)}>
+                  Eliminar
+                </button>
+                {/* </>
                 )}*/}
-               </td> 
+              </td>
             </tr>
           ))}
         </tbody>

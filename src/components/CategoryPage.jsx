@@ -3,7 +3,8 @@ import useStore from "../store/store";
 import { useNavigate } from "react-router-dom";
 
 function CategoryPage() {
-  const { categories, addCategory, updateCategory, removeCategory } = useStore(); // Destructuramos `setBrands`
+  const { categories, addCategory, updateCategory, removeCategory } =
+    useStore(); // Destructuramos `setBrands`
   const [newCategory, setNewCategory] = useState("");
   const [editingCategory, setEditingCategory] = useState(null);
   const [editedName, setEditedName] = useState("");
@@ -52,7 +53,9 @@ function CategoryPage() {
   // };
 
   const handleDeleteCategory = (code) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
+    if (
+      window.confirm("¿Estás seguro de que deseas eliminar esta categoría?")
+    ) {
       fetch(`https://ventuc-stock-back.onrender.com/categories/${code}`, {
         method: "DELETE",
       })
@@ -102,7 +105,7 @@ function CategoryPage() {
                     onChange={(e) => setEditedName(e.target.value)}
                   />
                 ) : (
-                    category.name
+                  category.name
                 )}
               </td>
               <td>{new Date(category.date).toLocaleDateString()}</td>
@@ -119,7 +122,9 @@ function CategoryPage() {
                     )}
                     </td> */}
               <td>
-                <button onClick={() => handleDeleteCategory(category.code)}>Eliminar</button>
+                <button onClick={() => handleDeleteCategory(category.code)}>
+                  Eliminar
+                </button>
               </td>
             </tr>
           ))}

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import "../styles/SalesForm.css";
 import useStore from "../store/store";
+import Logo from "../assets/logo.jpeg";
 
 const url = "https://ventuc-stock-back.onrender.com";
 
@@ -24,23 +26,29 @@ function SalesForm({ closeModal }) {
         },
         body: JSON.stringify(venta),
       });
-  
+
       const responseData = await response.json();
-      
+
       if (!response.ok) {
         // Muestra un log con la respuesta del servidor si no es correcta
         console.error("Error en la respuesta del servidor:", responseData);
-        throw new Error(`Error al ejecutar la venta: ${responseData.message || response.statusText}`);
+        throw new Error(
+          `Error al ejecutar la venta: ${
+            responseData.message || response.statusText
+          }`
+        );
       }
-  
+
       console.log("Respuesta del servidor:", responseData);
       return responseData;
     } catch (error) {
-      console.error("Error en la solicitud de registro de venta:", error.message);
+      console.error(
+        "Error en la solicitud de registro de venta:",
+        error.message
+      );
       throw error; // Propaga el error para que lo capture el `catch` en `handleSubmit`
     }
   };
-  
 
   const updateStockProduct = async (updatedStock) => {
     const response = await fetch(
@@ -61,21 +69,21 @@ function SalesForm({ closeModal }) {
     return await response.json();
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  //   if (!productDetails || quantity <= 0) {
-  //     alert("Por favor selecciona un producto válido y una cantidad válida.");
-  //     return;
-  //  }
+    //   if (!productDetails || quantity <= 0) {
+    //     alert("Por favor selecciona un producto válido y una cantidad válida.");
+    //     return;
+    //  }
 
     if (!productDetails) {
       alert("Por favor selecciona un producto.");
       return;
     }
 
-    const totalSuma = parseFloat(productDetails.salePrice) + parseFloat(incremento);
+    const totalSuma =
+      parseFloat(productDetails.salePrice) + parseFloat(incremento);
 
     const sale = {
       type: "Venta de producto",
@@ -102,12 +110,12 @@ function SalesForm({ closeModal }) {
     try {
       // 1. Ejecutar la venta
       // const saleData =
-       await saleRecord(sale);
+      await saleRecord(sale);
       // recordSale(saleData);
 
       // 2. Actualizar el stock de los productos
       const updatedStock = productDetails.stock - quantity;
-      // const updatedProductData = 
+      // const updatedProductData =
       await updateStockProduct(updatedStock);
       // updateStock(updatedProductData.code, updatedProductData.stock);
 
@@ -133,117 +141,150 @@ function SalesForm({ closeModal }) {
   }, [selectedProduct, products]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Registrar Venta</h2>
-      <label>
-        Producto:
-        <select
-          value={selectedProduct}
-          onChange={(e) => setSelectedProduct(e.target.value)}
-        >
-          <option value="">Seleccionar producto</option>
-          {products.map((product) => (
-            <option
-              key={product.code}
-              value={product.code}
-              disabled={product.stock === 0}
-            >
-              {product.name} {product.stock === 0 ? "(Sin Stock)" : ""}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      {productDetails && (
-        <div>
-          <h3>Detalles del Producto Seleccionado</h3>
-          <p>
-            <strong>Nombre:</strong> {productDetails.name}
-          </p>
-          <p>
-            <strong>Descripción:</strong> {productDetails.description}
-          </p>
-          <p>
-            <strong>Categoría:</strong> {productDetails.category}
-          </p>
-          <p>
-            <strong>Marca:</strong> {productDetails.brand}
-          </p>
-          <p>
-            <strong>Precio de Venta:</strong> {productDetails.salePrice}
-          </p>
-          <p>
-            <strong>Stock Disponible:</strong> {productDetails.stock}
-          </p>
+    <div className="contenedorForm">
+      <div className="titleVenta">
+        <div className="contenedorLogoVenta">
+          <img className="imgLogoVenta" src={Logo} alt="logo" />
         </div>
-      )}
+        <h2>Registrar Venta</h2>
+      </div>
+      <form onSubmit={handleSubmit} className="formularioVenta">
+        <label className="seleccionProdVenta">
+          <div>
+            Seleccione un producto:
+            <select
+              value={selectedProduct}
+              onChange={(e) => setSelectedProduct(e.target.value)}
+            >
+              <option value="">Seleccionar producto</option>
+              {products.map((product) => (
+                <option
+                  key={product.code}
+                  value={product.code}
+                  disabled={product.stock === 0}
+                >
+                  {product.name} {product.stock === 0 ? "(Sin Stock)" : ""}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <label>
-        Cantidad:
-        <input
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
-          min="1"
-          required
-        />
-      </label>
+          <button className="botonVenta">Borrar</button>
+        </label>
 
-      <label>
-        Comprador:
-        <input
-          type="text"
-          value={client}
-          onChange={(e) => setClient(e.target.value)}
-          placeholder="Nombre del comprador"
-          required
-        />
-      </label>
+        <div className="datos">
+          <div className="descripcionProd">
+            <h3 className="subtitleVenta">Detalles del Producto</h3>
+            {/* {productDetails && ( */}
+            <div className="contenedorLabels">
+              <p className="itemDescripcion">
+                <strong>Nombre:</strong>
+                {productDetails && <span>{productDetails.name}</span>}
+              </p>
+              <p className="itemDescripcion">
+                <strong>Descripción:</strong>
+                {productDetails && <span>{productDetails.description}</span>}
+              </p>
+              <p className="itemDescripcion">
+                <strong>Categoría:</strong>{" "}
+                {productDetails && <span>{productDetails.category}</span>}
+              </p>
+              <p className="itemDescripcion">
+                <strong>Marca:</strong>{" "}
+                {productDetails && <span>{productDetails.brand}</span>}
+              </p>
+              <p className="itemDescripcion">
+                <strong>Precio de Venta:</strong> $
+                {productDetails && <span>{productDetails.salePrice}</span>}
+              </p>
+              <p className="itemDescripcion">
+                <strong>Stock Disponible:</strong>{" "}
+                {productDetails && <span>{productDetails.stock}</span>}
+              </p>
+            </div>
+          </div>
 
-      <label>
-        Incremento:
-        <input
-          type="number"
-          value={incremento}
-          onChange={(e) => setIncremento(Number(e.target.value))}
-          min="0"
-          step="1"
-          placeholder="Incremento en el precio"
-        />
-      </label>
+          <div className="datosVenta">
+            <h3 className="subtitleVenta">Detalles de la compra</h3>
+            <div className="contenedorLabels">
+              <label className="itemVenta">
+                Cantidad:
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                  min="1"
+                  required
+                />
+              </label>
 
-      <label>
-        Descripción del Incremento:
-        <input
-          type="text"
-          value={descIncremento}
-          onChange={(e) => setDescIncremento(e.target.value)}
-          placeholder="Motivo del incremento"
-        />
-      </label>
+              <label className="itemVenta">
+                Comprador:
+                <input
+                  type="text"
+                  value={client}
+                  onChange={(e) => setClient(e.target.value)}
+                  placeholder="Nombre del comprador"
+                  required
+                />
+              </label>
 
-      <label>
-        Método de Pago:
-        <select
-          value={paymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value)}
-        >
-          <option value="efectivo">Efectivo</option>
-          <option value="transferencia">Transferencia</option>
-          <option value="debito">Débito</option>
-          <option value="credito">Crédito</option>
-        </select>
-      </label>
+              <label className="itemVenta">
+                Incremento:
+                <input
+                  type="number"
+                  value={incremento}
+                  onChange={(e) => setIncremento(Number(e.target.value))}
+                  min="0"
+                  step="1"
+                  placeholder="Incremento en el precio"
+                />
+              </label>
 
-      {productDetails && (
-        <p>
-          <strong>Total:</strong> $
-          {parseFloat(productDetails.salePrice) + parseFloat(incremento)}
-        </p>
-      )}
+              <label className="itemVenta">
+                Descripción del Incremento:
+                <input
+                  type="text"
+                  value={descIncremento}
+                  onChange={(e) => setDescIncremento(e.target.value)}
+                  placeholder="Motivo del incremento"
+                />
+              </label>
 
-      <button type="submit">Registrar Venta</button>
-    </form>
+              <label className="itemVenta">
+                Método de Pago:
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                >
+                  <option value="efectivo">Efectivo</option>
+                  <option value="transferencia">Transferencia</option>
+                  <option value="debito">Débito</option>
+                  <option value="credito">Crédito</option>
+                </select>
+              </label>
+
+              <p className="total">
+                <strong className="totalStrong">Total: </strong>
+                <span>
+                  $
+                  {productDetails && productDetails.salePrice
+                    ? parseFloat(productDetails.salePrice) +
+                      parseFloat(incremento)
+                    : 0}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="botonesVenta">
+          <button type="submit" className="botonVenta">
+            Registrar Venta
+          </button>
+          <button className="botonVenta">Cancelar</button>
+        </div>
+      </form>
+    </div>
   );
 }
 
