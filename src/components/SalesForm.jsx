@@ -135,6 +135,20 @@ function SalesForm({ closeModal }) {
     }
   };
 
+  const resetForm = () => {
+    setSelectedProduct("");
+    setQuantity("");
+    setClient("");
+    setIncremento(0);
+    setDescIncremento("");
+    setPaymentMethod("efectivo");
+    setProductDetails(null);
+  };
+
+  const handleClear = () => {
+    resetForm();
+  };
+
   useEffect(() => {
     const product = products.find((p) => p.code == selectedProduct);
     setProductDetails(product);
@@ -169,7 +183,13 @@ function SalesForm({ closeModal }) {
             </select>
           </div>
 
-          <button className="botonVenta">Borrar</button>
+          <button
+            type="button"
+            className="botonVenta"
+            onClick={handleClear} // Añadimos la función para borrar
+          >
+            Borrar
+          </button>
         </label>
 
         <div className="datos">
@@ -277,11 +297,20 @@ function SalesForm({ closeModal }) {
             </div>
           </div>
         </div>
-        <div className="botonesVenta">
-          <button type="submit" className="botonVenta">
-            Registrar Venta
-          </button>
-          <button className="botonVenta">Cancelar</button>
+        <div className="footerVentas">
+          <p className="vendedorVentas">Vendedor: Usuario</p>
+          <div className="botonesVenta">
+            <button type="submit" className="botonVenta">
+              Registrar Venta
+            </button>
+            <button
+              type="button"
+              className="botonVenta"
+              onClick={closeModal} // Usamos closeModal para que haga la misma acción que la "X"
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </form>
     </div>
