@@ -134,13 +134,15 @@ function ProductForm({ closeModal }) {
   };
 
   const resetForm = () => {
-    setSelectedProduct("");
-    setQuantity("");
-    setClient("");
-    setIncremento(0);
-    setDescIncremento("");
-    setPaymentMethod("efectivo");
-    setProductDetails(null);
+    setName("");
+    setDescription("");
+    setBrand("");
+    setCategory("");
+    setBuyer("");
+    setImage("");
+    setPrice("");
+    setPurchaseDate("");
+    setStock("");
   };
 
   const handleClear = () => {
@@ -158,23 +160,22 @@ function ProductForm({ closeModal }) {
 
       <form onSubmit={handleSubmit} className="formularioNew">
         <div className="seleccionProdVenta">
-
-        <label>
-          Código del Nuevo Producto:{" "}
-          <strong>{String(productCodeCounter).padStart(5, "0")}</strong>
-        </label>
-        <button
-          type="button"
-          className="botonVenta"
-          onClick={handleClear} // Añadimos la función para borrar
-        >
-          Borrar
-        </button>
+          <label>
+            Código del Nuevo Producto:{" "}
+            <strong>{String(productCodeCounter).padStart(5, "0")}</strong>
+          </label>
+          <button
+            type="button"
+            className="botonVenta"
+            onClick={handleClear} // Añadimos la función para borrar
+          >
+            Borrar
+          </button>
         </div>
 
-        <div className="datos">
-          <div className="descripcionProd">
-            <label>
+        <div className="datosNuevoProd">
+          <div className="datos1">
+            <label className="contenedorLabelNuevoProd">
               Nombre del Producto:
               <input
                 type="text"
@@ -184,7 +185,7 @@ function ProductForm({ closeModal }) {
                 placeholder="Ingrese el nombre del producto"
               />
             </label>
-            <label>
+            <label className="contenedorLabelNuevoProd">
               Descripción:
               <textarea
                 value={description}
@@ -193,7 +194,7 @@ function ProductForm({ closeModal }) {
                 placeholder="Descripción del producto"
               />
             </label>
-            <label>
+            <label className="contenedorLabelNuevoProd">
               Cantidad:
               <input
                 type="number"
@@ -204,7 +205,7 @@ function ProductForm({ closeModal }) {
                 placeholder="Ingrese la cantidad"
               />
             </label>
-            <label>
+            <label className="contenedorLabelNuevoProd">
               Fecha de Compra:
               <input
                 type="date"
@@ -214,8 +215,8 @@ function ProductForm({ closeModal }) {
               />
             </label>
           </div>
-          <div className="datosVenta">
-            <label>
+          <div className="datos2">
+            <label className="contenedorLabelNuevoProd">
               Marca:
               <select
                 value={brand}
@@ -230,7 +231,7 @@ function ProductForm({ closeModal }) {
                 ))}
               </select>
             </label>
-            <label>
+            <label className="contenedorLabelNuevoProd">
               Categoría:
               <select
                 value={category}
@@ -245,8 +246,8 @@ function ProductForm({ closeModal }) {
                 ))}
               </select>
             </label>
-            <label>
-              Precio:
+            <label className="contenedorLabelNuevoProd">
+              Precio compra: $
               <input
                 type="number"
                 value={buyPrice}
@@ -257,7 +258,7 @@ function ProductForm({ closeModal }) {
                 placeholder="Ingrese el precio"
               />
             </label>
-            <label>
+            <label className="contenedorLabelNuevoProd">
               Imagen (URL):
               <input
                 type="text"
@@ -266,7 +267,7 @@ function ProductForm({ closeModal }) {
                 placeholder="URL de la imagen"
               />
             </label>
-            <label>
+            <label className="contenedorLabelNuevoProd">
               Comprador:
               <input
                 type="text"
@@ -276,13 +277,16 @@ function ProductForm({ closeModal }) {
               />
             </label>
           </div>
+
           <div className="footerVentas">
             <p className="vendedorVentas">Vendedor: Usuario</p>
             <div className="botonesVenta">
               <button type="submit" className="botonVenta">
                 Agregar producto
               </button>
-              <button type="button" className="botonVenta" onClick={closeModal}>
+              <button 
+                type="button" className="botonVenta" onClick={closeModal}
+              >
                 Cancelar
               </button>
             </div>
