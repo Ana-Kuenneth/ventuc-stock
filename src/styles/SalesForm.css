@@ -71,6 +71,7 @@
     background-color: #e1e4e8;
     border: #3f3e3e93 solid 1px;
     border-radius: 8px;
+    border: solid 1px rgb(175, 175, 165);
 }
 
 .itemDescripcion{
@@ -80,7 +81,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
+    border-radius: 8px;
+    border: solid 1px rgb(221, 221, 208);
+    
 }
 
 .datosVenta{
@@ -102,6 +105,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    border-radius: 8px;
+    border: solid 1px rgb(221, 221, 208);
 }
 
 .contenedorLabels{
@@ -109,6 +114,8 @@
     height: 100%;
     background-color: #ffffff;
     padding: 0.5rem;
+    border-radius: 8px;
+    border: solid 1px rgb(175, 175, 165);
 }
 
 .total{
