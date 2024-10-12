@@ -5,7 +5,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-body {
+.contenedorBody {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -14,6 +14,8 @@ body {
     height: 100vh;
     /* background-color: #e1e4e8; */
     background-color: #f6f6f6;
+    width: 100%;
+    margin-right: 3.3%;
 }
 
 /* Paleta de colores elegida
@@ -29,7 +31,7 @@ body {
 .contenedor {
     height: 500px;
     min-width: 1000px;
-    width: 100%;
+    width: 90%;
 
     display: flex;
     flex-direction: column;

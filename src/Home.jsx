@@ -80,69 +80,71 @@ const Home = () => {
 
   return (
     <>
-      <div className="contenedor">
-        <div className="parte1">
-          <h1 className="title">Control de Stock</h1>
-          <div className="contenedorLogo">
-            <img className="imgLogo" src={Logo} alt="logo" />
+      <div className="contenedorBody">
+        <div className="contenedor">
+          <div className="parte1">
+            <h1 className="title">Control de Stock</h1>
+            <div className="contenedorLogo">
+              <img className="imgLogo" src={Logo} alt="logo" />
+            </div>
+            <p className="subtitle">Para brindar un mejor servicio</p>
           </div>
-          <p className="subtitle">Para brindar un mejor servicio</p>
-        </div>
 
-        <div className="parte2">
-          <div className="mensajeUsuario">
-            <p className="fecha">{date}</p>
-            <p className="hora">{time}</p>
-            <p>Bienvenido Usuario</p>
-          </div>
-          <div className="contenedorTodosBtn">
-            <div className="contenedorBtn">
-              <button
-                className="botones"
-                onClick={() => setIsProductModalOpen(true)}
-              >
-                Agregar Producto Nuevo
-              </button>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                size="2xl"
-                style={{ color: "#ffffff" }}
-              />
+          <div className="parte2">
+            <div className="mensajeUsuario">
+              <p className="fecha">{date}</p>
+              <p className="hora">{time}</p>
+              <p>Bienvenido Usuario</p>
             </div>
+            <div className="contenedorTodosBtn">
+              <div className="contenedorBtn">
+                <button
+                  className="botones"
+                  onClick={() => setIsProductModalOpen(true)}
+                >
+                  Agregar Producto Nuevo
+                </button>
+                <FontAwesomeIcon
+                  icon={faSquarePlus}
+                  size="2xl"
+                  style={{ color: "#ffffff" }}
+                />
+              </div>
 
-            <div className="contenedorBtn">
-              <Link to="/historial">
-                <button className="botones">Registro</button>
-              </Link>
-              <FontAwesomeIcon
-                icon={faFolderOpen}
-                size="2xl"
-                style={{ color: "#ffffff" }}
-              />
-            </div>
+              <div className="contenedorBtn">
+                <Link to="/historial">
+                  <button className="botones">Registro</button>
+                </Link>
+                <FontAwesomeIcon
+                  icon={faFolderOpen}
+                  size="2xl"
+                  style={{ color: "#ffffff" }}
+                />
+              </div>
 
-            <div className="contenedorBtn">
-              <button
-                className="botones"
-                onClick={() => setIsSalesModalOpen(true)}
-              >
-                Registrar Venta
-              </button>
-              <FontAwesomeIcon
-                icon={faArrowUpFromBracket}
-                size="2xl"
-                style={{ color: "#ffffff" }}
-              />
-            </div>
-            <div className="contenedorBtn">
-              <Link to="/inventory">
-                <button className="botones">Inventario</button>
-              </Link>
-              <FontAwesomeIcon
-                icon={faBoxesStacked}
-                size="2xl"
-                style={{ color: "#ffffff" }}
-              />
+              <div className="contenedorBtn">
+                <button
+                  className="botones"
+                  onClick={() => setIsSalesModalOpen(true)}
+                >
+                  Registrar Venta
+                </button>
+                <FontAwesomeIcon
+                  icon={faArrowUpFromBracket}
+                  size="2xl"
+                  style={{ color: "#ffffff" }}
+                />
+              </div>
+              <div className="contenedorBtn">
+                <Link to="/inventory">
+                  <button className="botones">Inventario</button>
+                </Link>
+                <FontAwesomeIcon
+                  icon={faBoxesStacked}
+                  size="2xl"
+                  style={{ color: "#ffffff" }}
+                />
+              </div>
             </div>
           </div>
         </div>
