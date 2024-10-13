@@ -16,6 +16,7 @@ function SalesForm({ closeModal }) {
   const [productDetails, setProductDetails] = useState(null);
 
   const { products, recordSale, updateStock } = useStore();
+  const historyCodeCounter = useStore((state) => state.historyCodeCounter);
 
   const saleRecord = async (venta) => {
     try {
@@ -86,7 +87,7 @@ function SalesForm({ closeModal }) {
       parseFloat(productDetails.salePrice) + parseFloat(incremento);
 
     const sale = {
-      generalCode: "1",
+      generalCode: String(historyCodeCounter).padStart(6, "0"),
       type: "Venta de producto",
       code: code,
       productCode: productDetails.code,

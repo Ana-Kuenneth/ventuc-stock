@@ -18,6 +18,7 @@ function ProductForm({ closeModal }) {
   const [error, setError] = useState("");
 
   const productCodeCounter = useStore((state) => state.productCodeCounter);
+  const historyCodeCounter = useStore((state) => state.historyCodeCounter);
   const brands = useStore((state) => state.brands);
   const categories = useStore((state) => state.categories);
 
@@ -98,7 +99,7 @@ function ProductForm({ closeModal }) {
 
       // 2. MOVIMIENTO
       const movement = {
-        generalCode: "1",
+        generalCode: String(historyCodeCounter).padStart(6, "0"),
         type: "Ingreso de producto",
         code: newProductData.code, // Usa el código del producto retornado por el servidor
         productCode: newProductData.code,

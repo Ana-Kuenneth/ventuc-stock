@@ -86,7 +86,8 @@ function HistoryPage() {
                 .reverse()
                 .map((movement, index) => (
                   <tr key={index}>
-                    <td>{filteredMovements.length - index}</td>
+                    {/* <td>{filteredMovements.length - index}</td> */}
+                    <td>{movement.generalCode}</td>
                     <td>{movement.type}</td>
                     <td>{movement.code}</td>
                     <td>{movement.name}</td>

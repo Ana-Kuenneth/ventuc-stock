@@ -4,10 +4,10 @@ const useStore = create((set) => ({
   products: [],
   movements: [],
   sales: [],
-  // salesMovements: [],
   brands: [],
   categories: [],
   productCodeCounter: 100001, // El código inicial si no hay productos
+  historyCodeCounter: 0o1, // Iniciar el contador de movimientos en 1
 
   // Set de productos completos
   setProducts: (products) => {
@@ -26,7 +26,7 @@ const useStore = create((set) => ({
     };
     return {
       products: [...state.products, newProduct],
-      productCodeCounter: state.productCodeCounter + 1, // Incrementar el contador
+      productCodeCounter: state.productCodeCounter + 1, // Incrementar el contador de productos
     };
   }),
 
@@ -53,7 +53,7 @@ const useStore = create((set) => ({
     };
   }),
 
-  //Almacenar las ventas en el array
+  // Ventas
   setSales: (sales) => set({ sales }),
 
   // Registrar una venta
@@ -61,10 +61,16 @@ const useStore = create((set) => ({
     const updatedProducts = state.products.map((product) =>
       product.code === sale.code ? { ...product, stock: product.stock - sale.quantity } : product
     );
-    // const product = state.products.find((product) => product.code === sale.code);
+    
+    const newSale = {
+      ...sale,
+      generalCode: state.historyCodeCounter // Asignar el número de movimiento general
+    };
+
     return {
       products: updatedProducts,
-      sales: [...state.sales, sale],
+      sales: [...state.sales, newSale],
+      historyCodeCounter: state.historyCodeCounter + 1 // Incrementar el contador de movimientos
     };
   }),
 
@@ -83,16 +89,16 @@ const useStore = create((set) => ({
   updateBrand: (code, newName) => set((state) => ({
     brands: state.brands.map((brand) =>
       brand.code === code ? { ...brand, name: newName.toUpperCase() } : brand
-  ),
+    ),
   })),
 
   removeBrand: (code) => set((state) => ({
     brands: state.brands.filter((brand) => brand.code !== code),
   })),
-  
+
   // Categorías
   setCategories: (categories) => set({ categories }),
-  
+
   addCategory: (category) => set((state) => ({
     categories: [...state.categories, { 
       ...category, 
@@ -106,15 +112,14 @@ const useStore = create((set) => ({
       category.code === code ? { ...category, name: newName.toUpperCase() } : category
     ),
   })),
-  
+
   removeCategory: (code) => set((state) => ({
     categories: state.categories.filter((category) => category.code !== code),
   })),
 
-  
   // Movimientos
   setMovements: (movements) => set({ movements }),
-  
+
   // Registrar un movimiento
   registerMovement: (movementData) => set((state) => {
     const product = state.products.find((p) => p.code === movementData.code);
@@ -123,6 +128,7 @@ const useStore = create((set) => ({
     }
 
     const newMovement = {
+      generalCode: state.historyCodeCounter, // Asignar número de movimiento general
       type: movementData.type, // "Actualización", "Venta", "Compra", etc.
       code: movementData.code,
       name: product.name,
@@ -138,12 +144,14 @@ const useStore = create((set) => ({
 
     return {
       movements: [...state.movements, newMovement],
+      historyCodeCounter: state.historyCodeCounter + 1 // Incrementar el contador de movimientos
     };
   }),
 
   deleteMovement: (code) => set((state) => ({
     movements: state.movements.filter((movement) => movement.code !== code),
   })),
+
 
 
 
