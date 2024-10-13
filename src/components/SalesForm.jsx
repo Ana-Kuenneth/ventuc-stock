@@ -86,6 +86,7 @@ function SalesForm({ closeModal }) {
       parseFloat(productDetails.salePrice) + parseFloat(incremento);
 
     const sale = {
+      generalCode: "1",
       type: "Venta de producto",
       code: code,
       productCode: productDetails.code,
