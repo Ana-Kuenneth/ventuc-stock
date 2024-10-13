@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Modal from "./components/Modal";
 import useStore from "./store/store";
 import ProductForm from "./components/ProductForm";
+import TopPages from "./components/TopPages";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -82,13 +83,7 @@ const Home = () => {
     <>
       <div className="contenedorBody">
         <div className="contenedor">
-          <div className="parte1">
-            <h1 className="title">Control de Stock</h1>
-            <div className="contenedorLogo">
-              <img className="imgLogo" src={Logo} alt="logo" />
-            </div>
-            <p className="subtitle">Para brindar un mejor servicio</p>
-          </div>
+          <TopPages />
 
           <div className="parte2">
             <div className="mensajeUsuario">
