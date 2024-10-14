@@ -2,12 +2,13 @@ import { create } from 'zustand';
 
 const useStore = create((set) => ({
   products: [],
+  history: [], // Almacena tanto las ventas como los movimientos
   movements: [],
   sales: [],
   brands: [],
   categories: [],
   productCodeCounter: 100001, // El código inicial si no hay productos
-  historyCodeCounter: 0o1, // Iniciar el contador de movimientos en 1
+  historyCodeCounter: 1, // Iniciar el contador de movimientos en 1
 
   // Set de productos completos
   setProducts: (products) => {
@@ -47,36 +48,43 @@ const useStore = create((set) => ({
     const updatedProducts = state.products.map((product) =>
       product.code === code ? { ...product, stock: quantity } : product
     );
-  
+
     return {
       products: updatedProducts,
     };
   }),
 
   // Ventas
-  setSales: (sales) => set({ sales }),
+  setSales: (sales) => {
+    const maxCode = sales.reduce((max, sale) => Math.max(max, parseInt(sale.generalCode)), 0);
+    set({ 
+      sales, 
+      historyCodeCounter: maxCode + 1 // El código siguiente al mayor
+    });
+  },
 
   // Registrar una venta
   recordSale: (sale) => set((state) => {
     const updatedProducts = state.products.map((product) =>
       product.code === sale.code ? { ...product, stock: product.stock - sale.quantity } : product
     );
-    
+
     const newSale = {
       ...sale,
-      generalCode: state.historyCodeCounter // Asignar el número de movimiento general
+      generalCode: String(state.historyCodeCounter).padStart(5, '0') // Asignar el número de movimiento general
     };
 
     return {
       products: updatedProducts,
       sales: [...state.sales, newSale],
+      history: [...state.history, newSale], // Agregar la venta al historial
       historyCodeCounter: state.historyCodeCounter + 1 // Incrementar el contador de movimientos
     };
   }),
 
   // Marcas
   setBrands: (brands) => set({ brands }),
-  
+
   addBrand: (brand) => set((state) => ({
     brands: [...state.brands, { 
       ...brand, 
@@ -85,7 +93,7 @@ const useStore = create((set) => ({
       date: new Date().toISOString().split('T')[0],
     }],
   })),
-  
+
   updateBrand: (code, newName) => set((state) => ({
     brands: state.brands.map((brand) =>
       brand.code === code ? { ...brand, name: newName.toUpperCase() } : brand
@@ -118,7 +126,14 @@ const useStore = create((set) => ({
   })),
 
   // Movimientos
-  setMovements: (movements) => set({ movements }),
+  setMovements: (movements) => {
+    const maxCode = movements.reduce((max, movement) => Math.max(max, parseInt(movement.generalCode)), 0);
+    set({ 
+      movements, 
+      historyCodeCounter: maxCode + 1,
+      history: [...movements] // Inicializar el historial con los movimientos existentes
+    });
+  },
 
   // Registrar un movimiento
   registerMovement: (movementData) => set((state) => {
@@ -128,7 +143,7 @@ const useStore = create((set) => ({
     }
 
     const newMovement = {
-      generalCode: state.historyCodeCounter, // Asignar número de movimiento general
+      generalCode: String(state.historyCodeCounter).padStart(5, '0'), // Incrementar el contador
       type: movementData.type, // "Actualización", "Venta", "Compra", etc.
       code: movementData.code,
       name: product.name,
@@ -139,19 +154,25 @@ const useStore = create((set) => ({
       previousStock: product.stock,
       newStock: movementData.newStock,
       price: product.price,
-      buyer: product.buyer,
+      buyer: movementData.buyer || product.buyer, // Asegurar que el comprador esté definido
     };
 
     return {
       movements: [...state.movements, newMovement],
+      history: [...state.history, newMovement], // Agregar el movimiento al historial
       historyCodeCounter: state.historyCodeCounter + 1 // Incrementar el contador de movimientos
     };
   }),
 
-  deleteMovement: (code) => set((state) => ({
-    movements: state.movements.filter((movement) => movement.code !== code),
-  })),
-
+  deleteMovement: (code) => set((state) => {
+    const updatedMovements = state.movements.filter((movement) => movement.code !== code);
+    const updatedHistory = state.history.filter((movement) => movement.code !== code);
+    
+    return {
+      movements: updatedMovements,
+      history: updatedHistory, // Actualizar el historial al eliminar un movimiento
+    };
+  }),
 
 
 

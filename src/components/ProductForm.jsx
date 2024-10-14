@@ -99,7 +99,7 @@ function ProductForm({ closeModal }) {
 
       // 2. MOVIMIENTO
       const movement = {
-        generalCode: String(historyCodeCounter).padStart(6, "0"),
+        generalCode: String(historyCodeCounter).padStart(5, "0"),
         type: "Ingreso de producto",
         code: newProductData.code, // Usa el código del producto retornado por el servidor
         productCode: newProductData.code,

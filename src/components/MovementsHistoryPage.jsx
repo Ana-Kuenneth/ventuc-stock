@@ -6,12 +6,13 @@ import "../styles/Movimientos.css";
 
 const url = "https://ventuc-stock-back.onrender.com";
 
-function HistoryPage() {
+function MovementsHistoryPage() {
   const movements = useStore((state) => state.movements) || [];
   const setMovements = useStore((state) => state.setMovements);
   const [filteredMovements, setFilteredMovements] = useState([]);
   const [filter, setFilter] = useState("todos"); // Estado para el filtro
 
+  // Obtener movimientos desde la API
   const getMovements = useCallback(async () => {
     try {
       const response = await fetch(`${url}/movements`);
@@ -27,6 +28,7 @@ function HistoryPage() {
     }
   }, [setMovements]);
 
+  // Cargar los movimientos al montar el componente
   useEffect(() => {
     getMovements();
   }, [getMovements]);
@@ -86,8 +88,7 @@ function HistoryPage() {
                 .reverse()
                 .map((movement, index) => (
                   <tr key={index}>
-                    {/* <td>{filteredMovements.length - index}</td> */}
-                    <td>{movement.generalCode}</td>
+                    <td>{String(movement.generalCode)}</td>
                     <td>{movement.type}</td>
                     <td>{movement.code}</td>
                     <td>{movement.name}</td>
@@ -113,6 +114,4 @@ function HistoryPage() {
   );
 }
 
-export default HistoryPage;
-
-
+export default MovementsHistoryPage;
