@@ -101,7 +101,7 @@ function HistoryPage() {
           className="filter-select"
         >
           <option value="todos">Todos los movimientos</option>
-          <option value="Venta">Ventas</option>
+          <option value="Venta de producto">Ventas</option>
           <option value="Ingreso de producto">Ingreso de producto</option>
           <option value="Actualización de Stock">Actualización de Stock</option>
         </select>
