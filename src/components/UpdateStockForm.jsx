@@ -65,12 +65,11 @@ function UpdateStockForm({ closeModal }) {
     try {
       // 1. Actualizar el stock del producto
       const updatedProductData = await updateProductStock(selectedProduct.code, quantityToUpdate);
-      updateStock(updatedProductData.code, updatedProductData.stock);
+      
 
       // 2. Registrar el movimiento
       const movement = {
         type: "Actualización de Stock",
-        code: selectedProduct.code,
         productCode: selectedProduct.code,
         name: selectedProduct.name,
         description: description, // Usamos la descripción proporcionada
@@ -82,6 +81,7 @@ function UpdateStockForm({ closeModal }) {
         buyPrice: selectedProduct.buyPrice,
       };
 
+      updateStock(updatedProductData.code, updatedProductData.stock, movement);
       await registerMovement(movement);
 
       // Restablecer el estado si todo ha ido bien

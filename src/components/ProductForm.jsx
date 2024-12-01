@@ -89,7 +89,8 @@ function ProductForm({ closeModal }) {
         buyPrice: parseFloat(buyPrice),
         salePrice: precioVenta,
         category,
-        code: String(productCodeCounter).padStart(5, "0"),
+        // code: String(productCodeCounter).padStart(5, "0"),
+        code: `P${String(productCodeCounter).padStart(5, "0")}`
       };
 
       const newProductData = await compraProducto(newProduct);
@@ -99,9 +100,10 @@ function ProductForm({ closeModal }) {
 
       // 2. MOVIMIENTO
       const movement = {
-        generalCode: String(historyCodeCounter).padStart(5, "0"),
         type: "Ingreso de producto",
-        code: newProductData.code, // Usa el código del producto retornado por el servidor
+        // generalCode: String(historyCodeCounter).padStart(5, "0"),
+        // generalCode: `HM${String(historyCodeCounter).padStart(6, "0")}`,
+        // code: `HI${String(historyCodeCounter).padStart(6, "0")}`, // Usa el código del producto retornado por el servidor
         productCode: newProductData.code,
         name: name,
         description: description,

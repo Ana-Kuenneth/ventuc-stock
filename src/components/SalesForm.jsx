@@ -78,6 +78,11 @@ function SalesForm({ closeModal }) {
     //     return;
     //  }
 
+    // if (!productDetails || isNaN(quantity) || quantity <= 0) {
+    //   alert("Por favor selecciona un producto válido y una cantidad positiva.");
+    //   return;
+    // }
+
     if (!productDetails) {
       alert("Por favor selecciona un producto.");
       return;
@@ -87,9 +92,10 @@ function SalesForm({ closeModal }) {
       parseFloat(productDetails.salePrice) + parseFloat(incremento);
 
     const sale = {
-      generalCode: String(historyCodeCounter).padStart(6, "0"),
+      // generalCode: String(historyCodeCounter).padStart(6, "0"),
+      // generalCode: `HM${String(historyCodeCounter).padStart(6, "0")}`,
       type: "Venta de producto",
-      code: code,
+      // code: `HS${String(historyCodeCounter).padStart(4, "0")}`,
       productCode: productDetails.code,
       productName: productDetails.name,
       productDescription: productDetails.description,
@@ -152,7 +158,7 @@ function SalesForm({ closeModal }) {
   };
 
   useEffect(() => {
-    const product = products.find((p) => p.code == selectedProduct);
+    const product = products.find((p) => p.productCode == selectedProduct);
     setProductDetails(product);
   }, [selectedProduct, products]);
 
