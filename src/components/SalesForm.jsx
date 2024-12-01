@@ -8,7 +8,7 @@ const url = "https://ventuc-stock-back.onrender.com";
 function SalesForm({ closeModal }) {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [code, setCode] = useState("S0001");
+  // const [code, setCode] = useState("S0001");
   const [client, setClient] = useState("");
   const [incremento, setIncremento] = useState(0);
   const [descIncremento, setDescIncremento] = useState("");
@@ -18,6 +18,13 @@ function SalesForm({ closeModal }) {
   const { products, recordSale, updateStock } = useStore();
   const historyCodeCounter = useStore((state) => state.historyCodeCounter);
 
+  // Formatear el código con la cantidad de ceros apropiada
+  const formatCode = (counter, prefix) => {
+    const digits = Math.max(5, counter.toString().length); // Mínimo 5 dígitos
+    return `${prefix}-${String(counter).padStart(digits, '0')}`;
+  }
+
+  
   const saleRecord = async (venta) => {
     try {
       const response = await fetch(`${url}/sales`, {
@@ -92,10 +99,10 @@ function SalesForm({ closeModal }) {
       parseFloat(productDetails.salePrice) + parseFloat(incremento);
 
     const sale = {
-      // generalCode: String(historyCodeCounter).padStart(6, "0"),
-      // generalCode: `HM${String(historyCodeCounter).padStart(6, "0")}`,
       type: "Venta de producto",
-      // code: `HS${String(historyCodeCounter).padStart(4, "0")}`,
+      // generalCode: String(historyCodeCounter).padStart(6, "0"),
+      generalCode: formatCode(historyCodeCounter, 'HM'),
+      code: formatCode(state.actualitationCodeCounter, 'HS'),
       productCode: productDetails.code,
       productName: productDetails.name,
       productDescription: productDetails.description,

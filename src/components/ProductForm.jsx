@@ -19,11 +19,18 @@ function ProductForm({ closeModal }) {
 
   const productCodeCounter = useStore((state) => state.productCodeCounter);
   const historyCodeCounter = useStore((state) => state.historyCodeCounter);
+  const incomeCodeCounter = useStore((state) => state.incomeCodeCounter);
   const brands = useStore((state) => state.brands);
   const categories = useStore((state) => state.categories);
 
   const aumento = buyPrice * 0.5;
   const precioVenta = parseFloat(buyPrice) + parseFloat(aumento);
+
+  // Formatear el código con la cantidad de ceros apropiada
+  const formatCode = (counter, prefix) => {
+    const digits = Math.max(5, counter.toString().length); // Mínimo 5 dígitos
+    return `${prefix}-${String(counter).padStart(digits, '0')}`;
+  }
 
   const compraProducto = async (newProduct) => {
     try {
@@ -55,6 +62,24 @@ function ProductForm({ closeModal }) {
     if (!response.ok) {
       throw new Error(
         `Error al registrar el movimiento: ${response.statusText}`
+      );
+    }
+
+    return await response.json();
+  };
+
+  const registerIncome = async (income) => {
+    const response = await fetch(`${url}/incomes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(income),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Error al registrar el ingreso de producto: ${response.statusText}`
       );
     }
 
@@ -102,8 +127,8 @@ function ProductForm({ closeModal }) {
       const movement = {
         type: "Ingreso de producto",
         // generalCode: String(historyCodeCounter).padStart(5, "0"),
-        // generalCode: `HM${String(historyCodeCounter).padStart(6, "0")}`,
-        // code: `HI${String(historyCodeCounter).padStart(6, "0")}`, // Usa el código del producto retornado por el servidor
+        generalCode: formatCode(historyCodeCounter, 'HM'),
+        code: formatCode(incomeCodeCounter, 'HI'), // Usa el código del producto retornado por el servidor
         productCode: newProductData.code,
         name: name,
         description: description,
@@ -116,6 +141,7 @@ function ProductForm({ closeModal }) {
       };
 
       await registerMovement(movement);
+      await registerIncome(movement);
 
       // Restablecer el estado si todo ha ido bien
       setError("");

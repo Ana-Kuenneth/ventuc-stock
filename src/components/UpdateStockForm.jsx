@@ -9,7 +9,13 @@ function UpdateStockForm({ closeModal }) {
   const [description, setDescription] = useState(""); // Campo de descripción para el movimiento
   const [error, setError] = useState("");
 
-  const { products, updateStock } = useStore();
+  const { products, updateStock, historyCodeCounter, actualitationCodeCounter } = useStore();
+
+  // Formatear el código con la cantidad de ceros apropiada
+  const formatCode = (counter, prefix) => {
+    const digits = Math.max(5, counter.toString().length); // Mínimo 5 dígitos
+    return `${prefix}-${String(counter).padStart(digits, '0')}`;
+  }
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
@@ -70,6 +76,8 @@ function UpdateStockForm({ closeModal }) {
       // 2. Registrar el movimiento
       const movement = {
         type: "Actualización de Stock",
+        generalCode: formatCode(historyCodeCounter, 'HM'),
+        code: formatCode(actualitationCodeCounter, 'HA'),
         productCode: selectedProduct.code,
         name: selectedProduct.name,
         description: description, // Usamos la descripción proporcionada
