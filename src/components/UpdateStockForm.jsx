@@ -22,6 +22,7 @@ function UpdateStockForm({ closeModal }) {
     setQuantity(product.stock);
   };
 
+  //Ruta corrije el actual stock de cada producto
   const updateProductStock = async (productCode, stock) => {
     const response = await fetch(`${url}/products/actualizarStock/${productCode}`, {
       method: "PATCH",
@@ -38,6 +39,8 @@ function UpdateStockForm({ closeModal }) {
     return await response.json();
   };
 
+
+  //Ruta almacena todos los movimientos (venta, ingreso, actualizacion stock)
   const registerMovement = async (movement) => {
     const response = await fetch(`${url}/movements`, {
       method: "POST",
@@ -54,6 +57,13 @@ function UpdateStockForm({ closeModal }) {
     return await response.json();
   };
 
+
+  //Ruta almacena todas las actualizaciones
+  //(poner)  
+
+
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const quantityToUpdate = parseInt(quantity);

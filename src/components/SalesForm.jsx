@@ -24,7 +24,10 @@ function SalesForm({ closeModal }) {
     return `${prefix}-${String(counter).padStart(digits, '0')}`;
   }
 
-  
+  //Ruta almacena todos los movimientos (venta, ingreso, actualizacion stock).
+  //(poner)
+
+  //Ruta almacena todas las ventas
   const saleRecord = async (venta) => {
     try {
       const response = await fetch(`${url}/sales`, {
@@ -58,6 +61,7 @@ function SalesForm({ closeModal }) {
     }
   };
 
+  //Ruta corrije el actual stock de cada producto
   const updateStockProduct = async (updatedStock) => {
     const response = await fetch(
       `${url}/products/actualizarStock/${productDetails.code}`,
@@ -77,6 +81,9 @@ function SalesForm({ closeModal }) {
     return await response.json();
   };
 
+
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 

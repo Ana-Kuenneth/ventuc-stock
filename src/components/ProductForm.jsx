@@ -32,6 +32,7 @@ function ProductForm({ closeModal }) {
     return `${prefix}-${String(counter).padStart(digits, '0')}`;
   }
 
+  //Ruta almacena todos los productos
   const compraProducto = async (newProduct) => {
     try {
       const response = await fetch(`${url}/products`, {
@@ -50,6 +51,7 @@ function ProductForm({ closeModal }) {
     }
   };
 
+  //Ruta almacena todos los movimientos (venta, ingreso, actualizacion stock)
   const registerMovement = async (movement) => {
     const response = await fetch(`${url}/movements`, {
       method: "POST",
@@ -68,6 +70,7 @@ function ProductForm({ closeModal }) {
     return await response.json();
   };
 
+  //Ruta almacena todas los nuevos ingresos
   const registerIncome = async (income) => {
     const response = await fetch(`${url}/incomes`, {
       method: "POST",
@@ -86,6 +89,9 @@ function ProductForm({ closeModal }) {
     return await response.json();
   };
 
+
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
